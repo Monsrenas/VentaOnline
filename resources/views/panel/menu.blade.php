@@ -282,7 +282,8 @@ function Registros(...args)
 
   }).fail(function() {
        console.log('Error en carga de Datos');
-  });}
+  });
+}
 
 function borraItem(controlador, clase, condicion)
   {

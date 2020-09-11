@@ -1,5 +1,5 @@
 
-  <div class="container" style="margin-bottom: 10px;">
+  <div class="container" style="margin-bottom: 6px; margin-top: 6px; max-height: 200px; overflow: hidden;">
 
   <div class="row">
    <div class="col-md-1">
@@ -14,18 +14,19 @@
       </ol>
       <div class="carousel-inner" >
         <div class="carousel-item active marco" >
-          <img class="d-block w-100 " src="{{ asset('Ofertas.jpg') }}" alt="Screenshot 11">
+          <img class="d-block w-100 " src="{{ asset('/images/b1.jpg') }}" alt="Screenshot 11">
         <div class="carousel-caption d-none d-md-block">
+          {{--
           <h3 style="color: blue; margin: 2px;">Descuentos de locura</h3>
           <p style="color: gray;" >Estamos brindando los mejores descuentos a productos Bosch</p>
-          <a href="" class="btn btn-primary">Mas informacion</a>
+          <a href="" class="btn btn-primary">Mas informacion</a>  --}}
         </div>
         </div>
         <div class="carousel-item marco">
-          <img class="d-block w-100" src="{{ asset('Ofertas1.png') }}" alt="Screenshot 10">
+          <img class="d-block w-100" src="{{ asset('/images/b1.jpg') }}" alt="Screenshot 10">
         </div>
         <div class="carousel-item marco">
-          <img class="d-block w-100" src="{{ asset('Ofertas2.png') }}" alt="Screenshot 13">
+          <img class="d-block w-100" src="{{ asset('/images/b2.jpg') }}" alt="Screenshot 13">
         </div>
       </div>
       <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">

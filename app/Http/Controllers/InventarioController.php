@@ -131,16 +131,101 @@ class InventarioController extends Controller
 
        
     }
+
+
+
 //Filtro
-    public function pagina(Request $request)
+    public function xxpagina(Request $request)
     {
-        //$ListDescuento=$this->DevuelveBase($request);
-        $ListProducto=Inventario::when((isset($request->almacen)), function($q){
-                                                         return $q->where('almacen',request('almacen'));
-                                                      })->paginate(9); 
-         $view = View::make('single');
-        return $view->with('lista',$ListProducto);                           
+        $ListProducto=Inventario::whereHas(
+           'detalles', function($query) 
+           {
+                $query->Where(function ($query)  {
+                
+                    
+                    //$query->where('nombre','like', '%'.request('palabra').'%');
+                
+                    });
+           },'>=', 1)->paginate(9);
+
+         //dd($ListProducto);   
+         $vista=View::make('Producto_simple');
+         //dd($vista->with('lista',$ListProducto));
+        return $vista->with('lista',$ListProducto) ; 
     }
+
+
+
+
+
+
+
+
+
+
+    public function pagina(Request $request)
+    {   
+         
+        $ListProducto=Inventario::whereHas('detalles', function($q)
+        {
+            
+            if ( request('palabra') ) 
+            {   
+                $plbr = explode(",",request('palabra'));
+                
+                foreach ($plbr as $palabra) 
+                {
+                    $q->where('nombre','like', '%'.$palabra.'%');
+
+                }  
+            }
+
+            if ( request('modelo') ) 
+            {
+                  
+               $q->where( function($q){
+                             $mdls = explode(",",request('modelo'));
+                             $mdls=['001001','003003'];      
+                            foreach ($mdls as $modelo) 
+                            {
+                              return $q->orWhere(function($q) use ($modelo){  
+                                return $q->whereRaw(["modelos.modelo"=> $modelo]);
+                                
+                              });  
+                            }
+                });            
+                //dd($q->first()->modelos['modelo']);
+                /*
+                $array=['001001','003023'];    
+                //$tmp=(count(array_intersect($array, $q->first()->modelos['modelo']))>0);
+                
+                
+                foreach ($q->get() as $key => $value) {
+                    //dd($value->modelos);
+                   if  (isset($value->modelos['modelo']))
+                    {
+                        
+                        $tmp=(count(array_intersect($array, $value->modelos['modelo']))>0);
+                        //$tmp=(count(array_intersect($array, $array))>0);
+                                       
+                                        if (!($tmp))
+                                            {
+                                                //dd($value->modelos['modelo']);
+                                                $q->orWhere('nombre','william');
+                                            }
+                    } else {$q->orWhere('nombre','william');}
+                 }
+                 
+                 //return true; 
+                //return $q->where('nombre', 'Rotor de freno'); */
+            }
+
+        },'>=', 1)->paginate(9); 
+                $vista=View::make('Producto_simple');
+        return $vista->with('lista',$ListProducto) ;                           
+    }
+
+
 
     public function enFiltro(Request $request, $producto)
     {
@@ -277,13 +362,6 @@ $view->with('info',$request);
 
     /* Panel de Administracion */
 
-    public function OLDlistadoProductos(Request $request)
-    {
-        $request->referencia='productos';
-        $ListProducto=$this->DevuelveBase($request);
-        return view('administracion.productos')->with('producto',$ListProducto);
-    }
-
      public function listadoProductos(Request $request)
     {
         $request->referencia='productos';
@@ -294,14 +372,14 @@ $view->with('info',$request);
     /* Operaciones Carrito */ 
 
     public function CarritoAgregarItem(Request $request)
-    {   $Vista=$this->Vista($request);
+    {   $Vista=$this->DatosCar($request);
         if(!isset($_SESSION)){
                          session_start();
                          if (!isset($_SESSION['MyCarrito'])) {$_SESSION['MyCarrito']= [];}
                        }
 
         $TmpCon = $_SESSION['MyCarrito'];
-
+       
         if (isset($TmpCon[$Vista->info['codigo']])){
                         $TmpCon[$Vista->info['codigo']]['cantidad']+=$request->cantidad;
                  }
@@ -309,6 +387,7 @@ $view->with('info',$request);
                    $TmpCon[$Vista->info['codigo']]=$Vista->info;
                    $TmpCon[$Vista->info['codigo']]['cantidad']=$request->cantidad;
                  }
+
         //$tmn=count($TmpCon);
         //Session::put('MyCarrito', $TmpCon);
         $_SESSION['MyCarrito'] = $TmpCon;
@@ -326,7 +405,7 @@ $view->with('info',$request);
     }
 
     public function CarritoCambiaCanti(Request $request)
-    {   $Vista=$this->Vista($request);
+    {   $Vista=$this->DatosCar($request);
         if(!isset($_SESSION)){     session_start();      }    
         $TmpCon = $_SESSION['MyCarrito'];
         $TmpCon[$request->codigo]['cantidad']=$request->valor;    
@@ -343,5 +422,20 @@ $view->with('info',$request);
      
         return $lista;
     }
+
+    public function DatosCar(Request $request)
+        {
+            $Prod=Inventario::where('producto', $request->campo)->first();
+            $Estructura['codigo']=$Prod->producto;                                             
+            $Estructura['fabricante']=$Prod->detalles->fabricante;
+            $Estructura['precio']=$Prod->precio;
+            $Estructura['cantidad']=0;
+            $Estructura['descripcion']=$Prod->detalles->nombre;
+            $Estructura['fotos']=$Prod->detalles->fotos['nombre'][0];
+            $Estructura['modelo']=$Prod->detalles->modelos;  
+            
+            $vista=View::make($request->url);
+           return $vista->with('info', $Estructura);
+        }
 
 }

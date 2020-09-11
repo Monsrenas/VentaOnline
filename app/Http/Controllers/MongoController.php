@@ -114,7 +114,7 @@ class MongoController extends Controller
 
 
 public function Listas($clase, $vista)
-	    {
+	    {	
 	      if (!isset(Auth::user()->rol)) { return redirect('/panel');}	 	
 	      $rol=Auth::user()->rol;
 	      $cond='';
@@ -151,6 +151,12 @@ public function Listas($clase, $vista)
 	      return View('panel.editaMarcaModelo')->with('lista',$todo);  
 	    }
 
+	public function ListaMarcasModelos(Request $request)
+	{
+		$todo=Marca::get();
+
+		return $todo;
+	}    
 	public function CadenaMarcaModelo(Request $request)
 	{
 		
@@ -173,7 +179,9 @@ public function Listas($clase, $vista)
 	    		$todo=Marca::where('id_marca', $request->id)->first();
 		    } else {
 		    			$todo=Marca::orderBy('id_marca', 'desc')->first();	
-		    			$nuevoID=str_pad($todo->id_marca+1, 3, "0", STR_PAD_LEFT);
+		    			if ($todo){
+		    					    $nuevoID=str_pad($todo->id_marca+1, 3, "0", STR_PAD_LEFT);
+		    					  } else {$nuevoID='001'; }
 		    			$todo=new Marca;
 		    			$todo->id_marca=$nuevoID;
 		    			$todo->nombre='';
@@ -236,7 +244,11 @@ public function Listas($clase, $vista)
 	    		$todo=$Clase::where('codigo', $request->codigo)->first();
 		    } else {
 		    			$todo=$Clase::orderBy('codigo', 'desc')->first();	
-		    			$nuevoID=str_pad($todo->codigo+1, 4, "0", STR_PAD_LEFT);
+		    			if ($todo){
+		    					     $nuevoID=str_pad($todo->codigo+1, 4, "0", STR_PAD_LEFT);
+		    					   } else {
+		    					   			  $nuevoID='0001';
+				    					   }
 		    			$todo=new $Clase;
 		    			$todo->codigo=$nuevoID;
 		    			$todo->nombre='';

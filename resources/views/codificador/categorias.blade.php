@@ -14,7 +14,7 @@ ul, #catUL {
                   background: black; 
                 }
 
-.xcaretX { font-size: 0.74em;
+.xcaretX { font-size: medium;
           cursor: pointer;
           -webkit-user-select: none; /* Safari 3.1+ */
           -moz-user-select: none; /* Firefox 2+ */
@@ -29,7 +29,7 @@ ul, #catUL {
   margin-right: 1px;
 }
 
-.caretX { font-size: 0.74em;
+.caretX { font-size: medium;
   cursor: pointer;
   -webkit-user-select: none; /* Safari 3.1+ */
   -moz-user-select: none; /* Firefox 2+ */

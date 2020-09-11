@@ -10,7 +10,7 @@ class Modelo extends Eloquent
     //
     protected $connection = 'mongodb';
     protected $collection = 'modelos';
-    protected $primaryKey = 'id_modelo';
+     
     protected $fillable = [
               'id_marca',
 							'id_modelo',

@@ -18,70 +18,20 @@
               } 
 
 </style>
-
-        <div style="text-align: center;">
-          <div class="input-group col-md-12" style="padding-bottom: 6px; margin-top: 2px;">
-              <input type="text" class="form-control" id="busqueda" name="busqueda" placeholder="">
+  
+          <input type="text" name="portador" id="portador">  
+          <div class="input-group" class="form-group col-md-12 col-sm-2">
+              <input type="text" class="form-control help-block" id="busqueda" name="busqueda" maxlength="128" placeholder="Buscar" size="125" type="text" >
               <div class="input-group-btn input-group-append">
                     <button class="btn btn-secondary" id="btnbusqueda"><i class="fa fa-search"></i></button>
               </div>
           </div>
 
           <div id="EtqtCondicion" class="input-group col-md-12" style="padding-bottom: 6px; margin-top: 2px;">
-              
           </div>          
-<!--
-          <form class="form-inline" style="float: left; padding: 2px;">
-             
-             <select id="sMarca" class="filtro" onchange="AgregaSubOpciones('sModelo','dmrc'+this.value)">
-                <option>MARCA</option>
-              </select>
-
-             <select id="sModelo" class="filtro">
-                <option>MODELO</option>
-              </select>
-
-             <select id="sSistema" class="filtro">
-                <option>FABRICANTE</option>
-              </select>
-
-          </form>  
-                                                                      -->
-        </div>
+         
 
 <script type="text/javascript">
-
-   function AgregaOpcion($id, $opcion, $valor)
-   {
-      var x = document.getElementById($id);
-      var option = document.createElement("option");    
-      option.text = $opcion ;
-      option.value= $valor;
-      x.add(option);
-    }
-
-    function AgregaSubOpciones($id, $cod) 
-    {
-        var y=vaciaSelecct($id);
-        var Elts = document.getElementsByClassName($cod);
-        for (var i = 0; i < Elts.length; i++) {
-                                                  var option = document.createElement("option");    
-                                                  option.text = Elts[i].text;
-                                                  option.value= Elts[i].id;
-                                                  y.add(option);
-                                              }
-    }
-
-    function vaciaSelecct($id)
-    {
-      
-       var x = document.getElementById($id);
-
-        for (let i = x.options.length; i >= 1; i--) {
-                                                          x.remove(i);
-                                                    }
-        return x;
-    }
 
     function BuscaCodigoModelo(ocurr)
       {
@@ -106,15 +56,17 @@
                     }
                   
                   $listModelo=$('.dmrc'+$nCodig);
+
                   for (var z = 0; z < $listModelo.length; z++) {
                       $nModelo=$listModelo[z].innerText;
                       $nModCod=$listModelo[z].id;
+                      
                       for (var y = 0; y < ocurr.length; y++) {
                                             $ind=($nModelo).toUpperCase().indexOf(ocurr[y].toUpperCase());
                                               if ($ind>-1) {  
                                                                  insertaCondicion($nMarca+': '+$nModelo);
                                                                  $coincidencias[y]=ocurr[y]; 
-                                                                 $resul['modelo'].push($nCodig+$nModCod);      
+                                                                 $resul['modelo'].push($nModCod);      
                                                            }
                                           }
                     }  
@@ -122,8 +74,8 @@
     
          for (var [key, value] of Object.entries(ocurr)) { 
                                                             if ($coincidencias.includes(value)) { ocurr[key]='';  } 
-                                                            }
-         console.log(ocurr); 
+                                                            } 
+                                              
          $retorno.push($resul);
          $retorno.push(ocurr);
 
@@ -163,6 +115,7 @@
        $('#EtqtCondicion').empty();   
       ocurr=depura(frase);
       $tmp=BuscaCodigoModelo(ocurr);
+       
       $resul=$tmp[0];
       ocurr=depura($tmp[1]);
 /*    $tmp=BuscaCodigoCategoria(ocurr);
@@ -179,8 +132,16 @@
                                                              }
                               }
 
-      cargarListaProductos($tmp);
+      //cargarListaProductos($tmp);
+      $dataCond='';
+      for (const prop in $tmp){
+      if (($tmp[prop]).length>0){  
+            $dataCond+='&'+prop+'='+$tmp[prop];
+      }
+      }
+      $('#portador').val($dataCond);
     }
+
 
     function depura(ocurr)
     {
@@ -206,29 +167,15 @@
     $('#busqueda').keypress(function(event){
                   var keycode = (event.keyCode ? event.keyCode : event.which);
                   if(keycode == '13'){
-                     if (($('#busqueda').val()).trim().length>0) {Filtrar($('#busqueda').val());}
-                  }
+                     Filtrar($('#busqueda').val());
+                     $('#btnbusqueda').click();
+                  } 
+    });
+
+    $('#busqueda').on('change', function(){
+                  Filtrar($('#busqueda').val());
     });
 
     $("#busqueda").focusin( function(){      $("#busqueda").select();    });
-
-    $('body').on('click', '#btnbusqueda', function(){
-             var texto=$('#busqueda').val();
-             /*if ($("#sMarca")[0].selectedIndex>0) {
-                                  texto=$("#sMarca option:selected").text();
-                                  if ($("#sModelo")[0].selectedIndex>0) {texto+=" "+$("#sModelo option:selected").text();}
-                                } */
-
-             //if ($("#sSistema")[0].selectedIndex>0) { texto+=" "+$("#sSistema option:selected").text();   }
-             if (texto.trim().length>0) { 
-                                          $('#busqueda').val(texto); // escribe en el input de busqueda los valores seleccionados
-                                          //$("#sMarca")[0].selectedIndex = 0;
-                                          //a=vaciaSelecct("sModelo");
-                                          //$("#sSistema")[0].selectedIndex = 0;
-                                          Filtrar(texto); 
-                                        } else { Filtrar($('#busqueda').val()); }
-           // Modal('Detalle_Producto',$(this).data("remoto"),$(this).data("extra"));     
-     });
-   
 
 </script>

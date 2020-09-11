@@ -31,14 +31,6 @@
                 <tbody>
                   @foreach($lista as $indice =>$patmt)
                     <tr>
-
-
-
-                                                    
-                                                   
-                        
-
-
                       <td width="60">
 
                         <button data-toggle="modal" data-target="#ModalAuxiliar" onclick="javascript:EditaFabricante('{{ $patmt['codigo'] }}', '/nuevaFabricante')"   type="button" class="btn btn-sm fa btn-outline-primary fa-pencil" style="font-size: .9em" >

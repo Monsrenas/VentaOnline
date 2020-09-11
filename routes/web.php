@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Empresa;
 use App\Configuracion;
 use App\Usuario;
+ 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +18,11 @@ use App\Usuario;
 
 //Route::get('/', function () { return view('welcome1'); });
 Route::get('/','InventarioController@pagina');
+Route::get('/', function () {
+    return view('welcome');
+});
+
+/*
 Route::get('/producto', function () {
     return view('vista_productos_categoria');
 });
@@ -32,9 +38,7 @@ Route::get('/ventaproducto', function () {
 Route::get('/venta', function () {
     return view('vista_detalle_producto');
 });
-
-
-
+*/
 
 Route::get('login', function () {
     return view('autenticacion.Funciones_login');
@@ -47,14 +51,14 @@ Route::get('firebase','KaizenController@index');
 
 Route::get('Leerbase','KaizenController@Leerbase');
 Route::get('DevuelveBase','KaizenController@DevuelveBase');
-Route::get('Info_Producto','KaizenController@Info_Producto');
+
 Route::post('GuardaRegistro','KaizenController@GuardaRegistro');
 
 Route::get('/Vista','KaizenController@Vista');
 
-Route::get('CarritoAgregarItem','KaizenController@CarritoAgregarItem');
-Route::get('CarritoEliminaItem','KaizenController@CarritoEliminaItem');
-Route::get('CarritoCambiaCanti','KaizenController@CarritoCambiaCanti');
+Route::get('CarritoAgregarItem','InventarioController@CarritoAgregarItem');
+Route::get('CarritoEliminaItem','InventarioController@CarritoEliminaItem');
+Route::get('CarritoCambiaCanti','InventarioController@CarritoCambiaCanti');
 
 
 Route::get('Detalle', function () {
@@ -80,12 +84,13 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('/panel', function () { return view('panel.menu'); });
 
 		 
-		Route::get('Resgistro','MongoController@Resgistro');
+		
 		Route::post('GuardaCodigo','MongoController@GuardaCodigo');
 		Route::get('productos', 'MongoController@EditaProducto');
 
 		Route::get('EdicionMarcaModelo','MongoController@ListaMarcas');
 		Route::get('ListaModelos','MongoController@ListaModelos');
+		Route::get('ListaMarcasModelos','MongoController@ListaMarcasModelos');
 		Route::get('nuevaMarca','MongoController@nuevaMarca');
 		Route::get('nuevoModelo','MongoController@nuevoModelo');
 		Route::post('ActualizaMarca','MongoController@ActualizaMarca');
@@ -134,6 +139,9 @@ Route::group(['middleware' => 'auth'], function()
 		Route::post('saveFiles','MongoController@saveFiles');
 		Route::get('delFiles','MongoController@delFiles');
 });
+
+//comunes
+Route::get('Resgistro','MongoController@Resgistro');
 
 //Usuarios
 Auth::routes();

@@ -28,7 +28,7 @@
                             <div class="col-lg-12">
                                 <div class="table-responsive">     
 
-                                    <table id="tablamarcas" class="table table-striped table-bordered" style="">
+                                    <table id="tablamarcas" class="table table-striped table-bordered">
                                     <thead id="cuerpo">
                                         <tr HEIGHT="10">
                                             <th></th>
