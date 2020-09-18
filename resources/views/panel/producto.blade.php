@@ -18,7 +18,7 @@
              
               <div class="row">  
                <strong class="col-lg-10" style="font-size: 1.6em;" ><i class="fa fa-list"></i> Productos </strong>
-              <div class="col-lg-1"><a href="javascript:productos('')" class="btn fa fa-plus btn-success"></a></div>
+              <div class="col-lg-1"><a href="{{url('/productos')}}" class="btn fa fa-plus btn-success"></a></div>
               </div>
            
             </div>
@@ -48,7 +48,7 @@
                                                    
                                                         <tr codigo='{{$patmt['_id']}}'>
                                                             <td width="60">
-                                                              <button onclick="javascript:productos('{{$patmt['codigo']}}')"  type="button" class="btn btn-sm fa btn-outline-primary fa-pencil" style="font-size: .9em" ></button> 
+                                                              <a href="{{url('/productos')}}/{{$patmt['codigo']}}"  type="button" class="btn btn-sm fa btn-outline-primary fa-pencil" style="font-size: .9em" ></a> 
                                                     
                                                               @if ((isset($patmt->existencia))and(!$patmt->existencia->isNotEmpty())) 
                                                               <button  type="button" id="{{$patmt['_id']}}"  class="btn btn-sm btn-outline-danger fa fa-trash-o" style="font-size: .9em"> </button> 
@@ -57,9 +57,8 @@
                                                              @endif 
                                                             </td>
 
-
                                                             <td style="font-size: 0.8em;"> 
-                                                             <a href="javascript:productos('{{$patmt['codigo']}}')">{{$patmt['codigo']}}</a> 
+                                                             <a href="{{url('/productos')}}/{{$patmt['codigo']}}">{{$patmt['codigo']}}</a> 
                                                             </td>
                                                             <td>{{$patmt['nombre'] ?? '' }}</td>                             
                                                             <td>{{$patmt['fabricantes']['nombre'] ?? '' }}</td>

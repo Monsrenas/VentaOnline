@@ -10,7 +10,7 @@ class Inventario extends Eloquent
     //
     protected $connection = 'mongodb';
     protected $collection = 'inventarios';
-    protected $primaryKey = 'codigo';
+    protected $primaryKey = 'producto';
     protected $fillable = [
 							'codigo',
               'producto',

@@ -13,6 +13,7 @@ use App\Inventario;
 use App\Pre_recepcion;
 use App\Recepcion;
 use App\Producto;
+use App\Descuento;
 use Illuminate\Support\Collection;
 use Auth;
 
@@ -54,7 +55,7 @@ class InventarioController extends Controller
                                     $recepcion=new Inventario;
                                     $recepcion=[
                                             'codigo'=>$value->codigo.$value->precio.$value->almacen,
-                                            'producto'=>$value->codigo,
+                                            'producto'=>strval($value->codigo),
                                             'almacen'=>$value->almacen,
                                             'precio'=>number_format($value['precio'], 2, ',', ' '),
                                             'cantidad'=>$value->cantidad ];
@@ -78,7 +79,7 @@ class InventarioController extends Controller
                                             'usuario'=>$usuario,
                                             'proveedor'=>$value['proveedor'],
                                             'documento'=>$value['documento'],
-                                            'codigo'=>$value['codigo'],
+                                            'codigo'=>strval($value['codigo']),
                                             'almacen'=>$value['almacen'],
                                             'precio'=>number_format($value['precio'], 2, ',', ' '),
                                             'cantidad'=>$value['cantidad'] ];
@@ -132,40 +133,10 @@ class InventarioController extends Controller
        
     }
 
-
-
 //Filtro
-    public function xxpagina(Request $request)
-    {
-        $ListProducto=Inventario::whereHas(
-           'detalles', function($query) 
-           {
-                $query->Where(function ($query)  {
-                
-                    
-                    //$query->where('nombre','like', '%'.request('palabra').'%');
-                
-                    });
-           },'>=', 1)->paginate(9);
-
-         //dd($ListProducto);   
-         $vista=View::make('Producto_simple');
-         //dd($vista->with('lista',$ListProducto));
-        return $vista->with('lista',$ListProducto) ; 
-    }
-
-
-
-
-
-
-
-
-
-
     public function pagina(Request $request)
-    {   
-         
+    {    
+        
         $ListProducto=Inventario::whereHas('detalles', function($q)
         {
             
@@ -175,158 +146,137 @@ class InventarioController extends Controller
                 
                 foreach ($plbr as $palabra) 
                 {
-                    $q->where('nombre','like', '%'.$palabra.'%');
-
+                    $q->where('nombre','like', '%'.$palabra.'%')->orWhere('codigo','like', '%'.$palabra.'%');
+                   
                 }  
             }
 
-            if ( request('modelo') ) 
-            {
-                  
+            if ( request('marca') || request('modelo') ) 
+            {   
                $q->where( function($q){
                              $mdls = explode(",",request('modelo'));
-                             $mdls=['001001','003003'];      
+                                 
                             foreach ($mdls as $modelo) 
                             {
-                              return $q->orWhere(function($q) use ($modelo){  
+                                $q->orWhere(function($q) use ($modelo){  
                                 return $q->whereRaw(["modelos.modelo"=> $modelo]);
                                 
                               });  
                             }
+
+                            if ( request('marca') )
+                            {
+                                $mrc = explode(",",request('marca'));
+                                 
+                                foreach ($mrc as $marca) 
+                                {
+                                    return $q->orWhere(function($q) use ($marca)
+                                    {  
+                                        return $q->whereRaw(["modelos.marca"=> $marca]);
+                                
+                                    });
+                                }
+
+                            } 
                 });            
-                //dd($q->first()->modelos['modelo']);
-                /*
-                $array=['001001','003023'];    
-                //$tmp=(count(array_intersect($array, $q->first()->modelos['modelo']))>0);
                 
-                
-                foreach ($q->get() as $key => $value) {
-                    //dd($value->modelos);
-                   if  (isset($value->modelos['modelo']))
-                    {
-                        
-                        $tmp=(count(array_intersect($array, $value->modelos['modelo']))>0);
-                        //$tmp=(count(array_intersect($array, $array))>0);
-                                       
-                                        if (!($tmp))
-                                            {
-                                                //dd($value->modelos['modelo']);
-                                                $q->orWhere('nombre','william');
-                                            }
-                    } else {$q->orWhere('nombre','william');}
-                 }
-                 
-                 //return true; 
-                //return $q->where('nombre', 'Rotor de freno'); */
             }
 
-        },'>=', 1)->paginate(9); 
+
+            if ( request('fabricante') ) 
+            {   
+                $q->where(function($q){  
+                                        
+                    $plbr = explode(",",request('fabricante'));
+                    
+                    foreach ($plbr as $fabricante) 
+                    {
+                        $q->orWhere('fabricante', $fabricante);
+                    }  
+                }); 
+            }
+
+            if ( request('categoria') ) 
+            {   
+                $q->where(function($q){  
+                                        
+                    $ctgr = explode(",",request('categoria'));
+                    
+                    foreach ($ctgr as $categoria) 
+                    {
+                        $q->orWhere('categorias', $categoria);
+                    }  
+                }); 
+            }  
+
+        })->paginate(9);
+
+
+         $ListProducto->map(function($q){
+                  $q=$this->Descuento($q);
+                  return $q;
+            });
+        
+    
+       // $ListProducto=$this->Descuento($ListProducto);
+
+                                                 
                 $vista=View::make('Producto_simple');
         return $vista->with('lista',$ListProducto) ;                           
     }
 
-
-
-    public function enFiltro(Request $request, $producto)
+    public function Descuento($q)
     {
-        $datos=$request->all(); 
-        $condicion=[];
-        $bndr=0;
-        $modelo= $producto['modelo'] ?? [];
-        $categoria= $producto['categoria'] ?? [];
-        $Codigos=$producto['codigos_adicionales'] ?? '';
-        $fabricante=$producto['codigo_fabricante'] ?? '';
-        $bandera=[];
-        foreach ($datos as $key => $value) {
-            $condicion[$key]=explode(',', $value);
-        }
-
-        $cmpld=count($condicion);
-
-        if (isset($condicion['palabra']))
-        {      
-            //$palabras=(count($condicion['palabra'])>1) ? count($condicion['palabra'])-1:0;
-            //$cmpld=$cmpld+$palabras;
-            foreach ($producto['descripcion'] as $key => $descripcion) {
-                 foreach ($condicion['palabra'] as $ind => $valor) {
-
-                    if (strpos( strtoupper($descripcion), strtoupper($valor) )>-1)  { 
-                        //echo strtoupper($descripcion)."-".strtoupper($valor)."//" ;
-
-                        $bndr=$bndr+1; $bandera['palabra']='1'; }
-
-                    if ($producto['codigo']==$valor) { $bndr=$bndr+1; $bandera['palabra']='1';}
-
-                   /*  foreach ($Codigos as $inco => $xCodigo) {
-                        if ($xCodigo==$valor) { $bndr=$bndr+1; }
-                    }*/
-                 }     
-            }      
-        }
-
-        if (isset($condicion['marca']))
-        {  
-            foreach ($modelo as $key => $descripcion) {
-                 foreach ($condicion['marca'] as $ind => $valor) { 
-                    if (substr( $descripcion,0,3)==$valor)  { 
-                        //echo $producto['codigo'].": ".substr($descripcion,0,3)."  ".$valor."//";
-                         $bndr=$bndr+1; $bandera['marca']='1';}
-                 }     
-            }      
-        }        
-
-        if (isset($condicion['modelo']))
-        { 
-            foreach ($modelo as $key => $descripcion) {
-                 foreach ($condicion['modelo'] as $ind => $valor) {
-                    if (strpos( $descripcion, $valor )!==FALSE)  { $bndr=$bndr+1; $bandera['modelo']='1';}
-                 }     
-            }      
-        }        
         
-        if (isset($condicion['categoria']))
-        { 
-            foreach ($categoria as $key => $descripcion) {
-               for ($i=1; $i <((strlen($descripcion)+1)/3) ; $i++) {
-                    $Subcategoria=substr($descripcion, 0, $i*3);
-                    
-                    foreach ($condicion['categoria'] as $ind => $valor) {     
-                         
-                         if ($valor==$Subcategoria)  { $bndr=$bndr+1; $bandera['categoria']='1';}
-                    }       
-                }      
-            }      
-        }            
-$view->with('info',$request);
-        if ((isset($condicion['fabricante']))and(strpos( $fabricante, $condicion['fabricante'][0] )!==FALSE))
-        { 
-            $bndr=$bndr+1;      $bandera['fabricante']='1';
-        }    
+                $hoy=date("Y-m-d");;
+               
+                $ofer=Descuento::where("inicio","<=",$hoy)
+                                 ->where("final",">=",$hoy)
+                                 ->get();
+                
+                foreach ($ofer as $value) {
 
-        if ((count($bandera)==$cmpld)or($cmpld==0)) { return true; }
+                        if (isset($value->condiciones))
+                        {
+                            $cumplidas=[];
+                            $cdcn=$value->condiciones['campo'];
+                            $vlr=$value->condiciones['valor'];
 
-        $palacond=((isset($bandera['palabra']))and(isset($condicion['palabra'])));
+                            for ($i=0; $i < count($cdcn); $i++) 
+                            {
 
-        //echo $palacond;
+                              if ($cdcn[$i]=='modelos')
+                              {
 
-        //if (($bndr>=$cmpld)and $palacond ) { return true; } 
+                                $enmodelo=false; $enmarca=false;
 
-        return false;
-    }                                                           //Final de la Funcion enFiltro
+                                if (isset($q->detalles->modelos['marca']))
+                                { 
+                                   $enmodelo=in_array($vlr[$i], $q->detalles->modelos['marca']);
+                                }
 
+                                if (isset($q->detalles->modelos['modelo']))
+                                   {
+                                     $enmarca=in_array($vlr[$i], $q->detalles->modelos['modelo']);
+                                   }
+                                  $cumplidas[$i]=$enmarca or $enmodelo;   
+                              }  else
+                              {   
 
+                                  $cumplidas[$i]=($q->detalles[$cdcn[$i]]==$vlr[$i]);
 
-    public function descuento()
-    {
-        return 10;
-    }
+                                  //echo ($i.'-'.$q->detalles['nombre'].'.'.$cdcn[$i].': '.$q->detalles[$cdcn[$i]].'<********>'.$vlr[$i].'<br>');
+                                 
+                              } 
+                            }
+                            if (!in_array(false  ,$cumplidas) ) {$q->descuento+=$value->valor;}
+                        }
 
-    public function yxVista(Request $request){    
-            $view = View::make($request->url);
+                    }    
+                
+                      
             
-            if($request->ajax()){
-                return $view->with('info',$request); 
-            }else return $view->with('info',$request);
+        return $q;
     }
 
    public function Vista(Request $request){    
@@ -380,12 +330,12 @@ $view->with('info',$request);
 
         $TmpCon = $_SESSION['MyCarrito'];
        
-        if (isset($TmpCon[$Vista->info['codigo']])){
-                        $TmpCon[$Vista->info['codigo']]['cantidad']+=$request->cantidad;
+        if (isset($TmpCon[$Vista->info['indice']])){
+                        $TmpCon[$Vista->info['indice']]['cantidad']+=$request->cantidad;
                  }
             else { 
-                   $TmpCon[$Vista->info['codigo']]=$Vista->info;
-                   $TmpCon[$Vista->info['codigo']]['cantidad']=$request->cantidad;
+                   $TmpCon[$Vista->info['indice']]=$Vista->info;
+                   $TmpCon[$Vista->info['indice']]['cantidad']=$request->cantidad;
                  }
 
         //$tmn=count($TmpCon);
@@ -425,15 +375,25 @@ $view->with('info',$request);
 
     public function DatosCar(Request $request)
         {
-            $Prod=Inventario::where('producto', $request->campo)->first();
+            $Prod=Inventario::where('codigo', $request->campo)->first();
+            $Prod=$this->Descuento($Prod);
+            $precio=$Prod->precio;
+
+            if ((isset($Prod->descuento))and($Prod->descuento>0))
+            {
+              $precio=number_format(floatval($Prod->precio)-((floatval($Prod->precio)*floatval($Prod->descuento)/100)), 2, '.', ''); 
+            }
+           
+            $Estructura['indice']=$Prod->producto.$Prod->precio;
             $Estructura['codigo']=$Prod->producto;                                             
             $Estructura['fabricante']=$Prod->detalles->fabricante;
-            $Estructura['precio']=$Prod->precio;
+            $Estructura['precio']=$precio;
             $Estructura['cantidad']=0;
             $Estructura['descripcion']=$Prod->detalles->nombre;
             $Estructura['fotos']=$Prod->detalles->fotos['nombre'][0];
             $Estructura['modelo']=$Prod->detalles->modelos;  
-            
+            $Estructura['invcodigo']=$Prod->codigo;
+
             $vista=View::make($request->url);
            return $vista->with('info', $Estructura);
         }

@@ -25,7 +25,8 @@ class Persona extends Authenticatable
                       'direccion',
                       'provincia',
                       'canton',
-                      'estado'
+                      'estado',
+                      'descuento'
 
    						];
 }

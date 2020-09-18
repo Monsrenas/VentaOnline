@@ -1,11 +1,27 @@
 
+function valida(cond)
+{
+  $dataCond='';  
+     
+  if (typeof cond == 'object'){  
+      for (const prop in cond){
+        if ((cond[prop]).length>0){  
+              $dataCond+='&'+prop+'='+cond[prop];
+        }
+      }  
+       return $dataCond; 
+    }
+    return cond
+}
+
 function MuestraProductos(condiciones)
   {    
-    console.log(condiciones);
-        $('#GaleriaGeneral').show();
+    
+        $('.galeriaProductos').show();
+        $('#selectores').show();
         $('#DetallesProducto').hide(); 
 
-    $data=condiciones;
+    $data=valida(condiciones);
     
     $.get('/pagina', $data, function(subpage){ 
 
@@ -16,12 +32,11 @@ function MuestraProductos(condiciones)
     });
 }
 
+
+
 $('#btnbusqueda').on('click', function(){
    
       MuestraProductos($('#portador').val());
-      $('#GaleriaGeneral').show();
-      $('#DetallesProducto').hide();
-
 });
 
 $(window).on('hashchange', function() {
@@ -30,7 +45,7 @@ $(window).on('hashchange', function() {
             if (page == Number.NaN || page <= 0) {
                 return false;
             }else{
-                getData(page);
+                //getData(page);
             }
         }
 });
@@ -73,8 +88,9 @@ $('body').on('click', 'a[data-toggle="detalles"]', function(){
           $.get('/Resgistro', $data, function(subpage){ 
 
              $('#DetallesProducto').empty().append(subpage);
-            $('#GaleriaGeneral').hide();
-             $('#DetallesProducto').show();
+            $('#DetallesProducto').show();
+            $('.galeriaProductos').hide();
+         
           }).fail(function() {
                console.log('Error en carga de Datos');
           });
@@ -88,7 +104,7 @@ $('body').on('click', 'button[data-toggle="carAdd"]', function(){
        $data='{{ csrf_token()}}&url=Carrito&campo='+$(this).data("remoto")+'&descripcion='+$(this).data("extra");
 
        $data+='&cantidad='+$cantidad;
-       console.log($data);
+        
 
        $.get('CarritoAgregarItem', $data, function(subpage){
              $('#right_wind').empty(); 

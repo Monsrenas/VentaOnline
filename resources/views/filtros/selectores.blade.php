@@ -19,11 +19,11 @@
 
 </style>
   
-          <input type="text" name="portador" id="portador">  
+          <input type="text" name="portador" id="portador" hidden>  
           <div class="input-group" class="form-group col-md-12 col-sm-2">
               <input type="text" class="form-control help-block" id="busqueda" name="busqueda" maxlength="128" placeholder="Buscar" size="125" type="text" >
               <div class="input-group-btn input-group-append">
-                    <button class="btn btn-secondary" id="btnbusqueda"><i class="fa fa-search"></i></button>
+                    <button class="btn btn-danger" id="btnbusqueda"><i class="fa fa-search"></i></button>
               </div>
           </div>
 
@@ -160,8 +160,8 @@
 
     function insertaCondicion(condicion)
     {
-      var elemento="<div class='CndcnEtq'>"+condicion+"<div>"; 
-      $('#EtqtCondicion').append(elemento);  
+      //var elemento="<div class='CndcnEtq'>"+condicion+"<div>"; 
+      //$('#EtqtCondicion').append(elemento);  
     }
 
     $('#busqueda').keypress(function(event){

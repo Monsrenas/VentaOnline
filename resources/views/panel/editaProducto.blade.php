@@ -1,3 +1,5 @@
+@extends('panel.menu')
+@section('operaciones')
 <div id="Centro" style="font-size: 0.8em;">
   <div class="header">
     
@@ -10,7 +12,7 @@
     <div class="card-header card">
      <div class="row">  
            <strong class="col-lg-9" style="font-size: 1.6em;" >Registro de productos</strong>
-           <div class="col-lg-1"><a href="javascript:productos('')" class="btn fa fa-plus btn-success"></a></div>
+           <div class="col-lg-1"><a href="{{url('/productos')}}" class="btn fa fa-plus btn-success"></a></div>
            <div class="col-lg-1"> <button id="btGuardaProd" class="btn fa fa-save btn-success" disabled=""></button></div>
           <div class="col-lg-1"><a href="{{url('/Listas/Producto/panel.producto')}}" class="btn fa fa-list "></a></div>
      </div>
@@ -161,25 +163,25 @@
      </form>
 </div>
 
-  <div id="MediaItem" hidden>
-                <div id="medidaBorra">
-                  <button type="button" class="btn btn-sm btn-outline-danger fa fa-trash-o" style="font-size: .9em"> </button>
-                </div>
-                <div id="medidaNombre">
-                  <input type="text" class="form-control form-control-sm mds" size="80" name="medidas[nombre][]"   required>
-                </div>
-                <div id="medidaValor">
-                  <input type="text" class="form-control form-control-sm mds" size="10" name="medidas[valor][]" required>
-                </div>
-                <div id="medidaUnidad">
-                   <select class="form-control form-control-sm mds" name="medidas[unidad][]" style="width: 110px">
-                        <option  value=0>Unidad</option>
-                        <option  value=1>Milimetro</option>
-                        <option  value=2>Centimetro</option>
-                        <option  value=3>Metro</option>
-                        <option  value=4>Pulgada</option>
-                    </select>
-                </div>
+<div id="MediaItem" hidden>
+              <div id="medidaBorra">
+                <button type="button" class="btn btn-sm btn-outline-danger fa fa-trash-o" style="font-size: .9em"> </button>
+              </div>
+              <div id="medidaNombre">
+                <input type="text" class="form-control form-control-sm mds" size="80" name="medidas[nombre][]"   required>
+              </div>
+              <div id="medidaValor">
+                <input type="text" class="form-control form-control-sm mds" size="10" name="medidas[valor][]" required>
+              </div>
+              <div id="medidaUnidad">
+                 <select class="form-control form-control-sm mds" name="medidas[unidad][]" style="width: 110px">
+                      <option  value=0>Unidad</option>
+                      <option  value=1>Milimetro</option>
+                      <option  value=2>Centimetro</option>
+                      <option  value=3>Metro</option>
+                      <option  value=4>Pulgada</option>
+                  </select>
+              </div>
 </div>
 
 <script type="text/javascript">
@@ -196,12 +198,8 @@ $('body').on('click', '.fa-trash-o', function()  //Boton que borra categoria
 $('input').attr("autocomplete","off");
 $('body').on('change paste', '#codigo_producto', function()
 {
-    $data="id="+$(this).val(); 
-    $.get('/productos', $data, function(subpage){
-       $('#EspacioAccion').html(subpage);        
-    }).fail(function() {
-       console.log('Error en carga de Datos');
-  });
+    location.href="/productos/"+$(this).val(); 
+     
 });
 
 $('body').on('blur', '#codigo_producto', function()
@@ -250,3 +248,4 @@ function ActNumero(elemento, visual)
       $('#'+visual).attr("placeholder", "("+$c.length+")"+$d);
 }
 </script>
+@endsection

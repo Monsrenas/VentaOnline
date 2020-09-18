@@ -21,8 +21,6 @@ class Producto extends Eloquent
               'categorias',
               'modelos',
               'fotos'
-							 
-							 
     ];
 
 

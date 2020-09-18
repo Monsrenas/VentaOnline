@@ -3,6 +3,7 @@
   <div class="footer-middle">
   <div class="container">
     <div class="row">
+      {{--
       <div class="col-md-3 col-sm-6">
         <!--Column1-->
         <div class="footer-pad">
@@ -50,7 +51,7 @@
              <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
              <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
             </ul>       
-    </div>
+    </div>--}}
     </div>
   <div class="row">
     <div class="col-md-12 copy">

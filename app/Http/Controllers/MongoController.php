@@ -13,8 +13,6 @@ use App\Medida;
 use App\Producto;
 use App\Pre_recepcion;
 use MongoDB\BSON\Regex;
- 
- 
 
 use Illuminate\Support\Facades\Auth;
 
@@ -48,8 +46,12 @@ class MongoController extends Controller
 
 	public function GuardaCodigo(Request $request)
 		{	 
+
+			$campo='_id'; if (isset($request->codigo)) {$campo='codigo'; }
+			$request->$campo=strval($request->$campo);
 			$Clase=$this->Clase($request->clase);
-			$todo=$Clase::where('codigo',$request->codigo)->first();
+			$todo=$Clase::where($campo,$request->$campo)->first();
+
 			if (!$todo) {
 				$Clase::create($request->all());
 			} else { $todo->update($request->all()); }
@@ -78,11 +80,11 @@ class MongoController extends Controller
 			return View('panel.configuracion')->with('lista',$todo);
 		}		
 
-   public function EditaProducto(Request $request)
+   public function EditaProducto(Request $request, $id=null)
 	    {  
-	    	if (isset($request->id)) {
-	    		$todo=Producto::where('codigo',$request->id)->first();
-	    		if (!$todo) {$todo= new Producto;	$todo->codigo=$request->id;}
+	    	if (isset($id)) {
+	    		$todo=Producto::where('codigo',$id)->first();
+	    		if (!$todo) {$todo= new Producto;	$todo->codigo=$id;}
 		    } else 	{
 		    			$todo= new Producto;
 		    		}
@@ -113,7 +115,7 @@ class MongoController extends Controller
 
 
 
-public function Listas($clase, $vista)
+public function Listas($clase, $vista, $condicion=null)
 	    {	
 	      if (!isset(Auth::user()->rol)) { return redirect('/panel');}	 	
 	      $rol=Auth::user()->rol;

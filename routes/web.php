@@ -16,6 +16,7 @@ use App\Usuario;
 |
 */
 
+//Evita error 404 Route::fallback(function () {  return redirect('/'); });
 //Route::get('/', function () { return view('welcome1'); });
 Route::get('/','InventarioController@pagina');
 Route::get('/', function () {
@@ -86,7 +87,7 @@ Route::group(['middleware' => 'auth'], function()
 		 
 		
 		Route::post('GuardaCodigo','MongoController@GuardaCodigo');
-		Route::get('productos', 'MongoController@EditaProducto');
+		Route::get('productos/{id?}', 'MongoController@EditaProducto');
 
 		Route::get('EdicionMarcaModelo','MongoController@ListaMarcas');
 		Route::get('ListaModelos','MongoController@ListaModelos');
@@ -111,9 +112,9 @@ Route::group(['middleware' => 'auth'], function()
 
 		//Usuarios
 		  Route::get('Perfil', function () { 
-													$lista=Usuario::find(Auth::user()->_id); 
-													return view('auth.personas.perfilUsuario')->with('lista', $lista)->with('rol',['Super Administrador','Administrador de sistema','Administrador de Sucursal','Empleado']); 
-												}); 
+												$lista=Usuario::find(Auth::user()->_id); 
+												return view('auth.personas.perfilUsuario')->with('lista', $lista)->with('rol',['Super Administrador','Administrador de sistema','Administrador de Sucursal','Empleado']); 
+											}); 
 
 		//Empresa
 		Route::get('editaEmpresa', function () { 

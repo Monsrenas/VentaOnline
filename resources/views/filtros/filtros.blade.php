@@ -25,6 +25,7 @@ border: 1px solid white;
  .filtros {
               font-weight: normal;
               margin-top: 4px;
+              color: white;
  }        
 </style>
   <h6 class="filtros">Categorías</h6>
@@ -57,7 +58,7 @@ border: 1px solid white;
       
        $resul['fabricante']=id;
       
-       cargarListaProductos($resul);
+       MuestraProductos($resul);
 
   }
 
@@ -100,7 +101,8 @@ $('body').on('click', '.Xmarcas', function(){
 });
 
 $('body').on('click', '.xModelo', function(){      
-      FiltrarModelo($(this).parent().parent().attr('id').substring(3)+$(this)['0']['id']);    
+      FiltrarModelo($(this)['0']['id']);
+       //FiltrarModelo($(this).parent().parent().attr('id').substring(3)+$(this)['0']['id']);      
 });
 
   /*PreLoadDataInView('#Interrogation', '&modelo=Interrogation&url=consultation.interrogation', 'flexlist');

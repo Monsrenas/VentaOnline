@@ -126,7 +126,7 @@
                        @if (( isset(Auth::user()->acceso['cp'] ))or(Auth::user()->rol=1))
                         <li> 
                            <a href="{{url('/Listas/Producto/panel.producto')}}" style="float: left;" >Productos </a>
-                            <a href="javascript: productos('')">
+                            <a href="{{url('/productos')}}">
                                   <i class="fa fa-plus-square-o text-right" style=" font-size: 0.98em; vertical-align: middle; height: 21px; width: 121px; padding-right: 2px; color: white;"></i>
                        
                             </a> 
@@ -174,6 +174,7 @@
                       @endif                   
 
                       <li><a href="{{url('/Listas/Almacen/inventario.lista_almacen')}}">Almacenes</a></li>
+                      <li><a href="{{url('/Listas/Descuento/panel.ofertas/_id,=,0')}}">Ofertas</a></li>
                     </ul>       
                 </li>
 
@@ -230,6 +231,8 @@
 </html>
   
 <script type="text/javascript">
+ $('input').attr("autocomplete","off");
+  
      var toggler = document.getElementsByClassName("caret");
             var i;
             for (i = 0; i < toggler.length; i++) {
@@ -238,27 +241,6 @@
                 this.classList.toggle("caret-down");
               });
             }
-
-
-
-function productos($id)
-{ 
-    $data="id="+$id;    
-    $.get('/productos', $data, function(subpage){
-       $('#EspacioAccion').html(subpage);        
-
-    }).fail(function() {
-       console.log('Error en carga de Datos');
-  });
-
-
-
-     $(document).ready(function(){
-        $('.dropdown-toggle').dropdown()
-    });
-
-}
-
 
 function Registros(...args)
 {
@@ -296,17 +278,17 @@ function borraItem(controlador, clase, condicion)
       });
   }
 
-  $('body').on( 'click', '.fa-trash-o', function () {  
-                                                                            $tablaMarcas
-                                                                                .row( $(this).parents('tr') )
-                                                                                .remove()
-                                                                                .draw();
-                                                                            } );
+$('body').on( 'click', '.fa-trash-o', function () {   
+                                                    if (typeof $tablaMarcas=='undefined'){ return;} 
+                                                          $tablaMarcas
+                                                            .row( $(this).parents('tr') )
+                                                            .remove()
+                                                            .draw();
+                                                  });
   
 //Activar boton de guardar para el formulario activo 
 $('body').on('change', 'input', function()
 {
-     
-      $("#btGuardaProd").attr('disabled',false);
+    $("#btGuardaProd").attr('disabled',false);
 });
 </script>

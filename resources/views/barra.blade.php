@@ -1,19 +1,26 @@
 
 <div id="tope"></div>
-<nav class="navbar  navbar-expand-md justify-content-between" style="background-image:url('/images/fondobarra.png');">
+<nav class="navbar  navbar-expand-md justify-content-between" style="background:red;">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
-          <a href="/">
-          <span style="font-size: 1.6em;font-weight:900; font-family: 'Arial'; color: white; text-shadow:5px 3px 7px #040452; line-height : 10px;">MAZPARTES <br> 
-            <span style="font-size: .54em;font-weight:100; font-family: 'Arial';">Respuestos automotrices</span>
+          <a href="/" style="text-align: center;">
+          <span style="font-size: 2em;font-weight:900; font-family: 'Times New Roman', Times, serif; color: white; text-shadow:5px 3px 7px #040452; line-height : 10px;">F1 <br> 
+            <span style="font-size: .54em;font-weight:100; font-family: 'Arial';">Motriz</span>
 
           </span>
           </a>
         </div>
 
+        <div class="navbar-collapse collapse dual-nav w-25 order-0 order-md-0">
+          <a href="/">
+          <span ><i class="fa fa-home" style="color: white; font-size: 2em;" aria-hidden="true"></i>
+
+          </span>
+          </a>
+        </div>
 
         <a  class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-10">@INCLUDE('filtros.selectores')</a>
         <div class="navbar-collapse collapse dual-nav w-50 order-2">

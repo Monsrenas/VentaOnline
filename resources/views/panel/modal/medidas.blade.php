@@ -36,20 +36,19 @@
                   <input type="text" class="form-control form-control-sm mds" size="10" name="medidas[valor][]" value="{{$lista->medidas['valor'][$i]   ?? ''}}" required>
                 </td>
                 <td>
-                   <select class="form-control form-control-sm mds" name="medidas[unidad][]" onready="javascript:Ponvalor(this,'Ejemplo')"  style="width: 110px">
-                        <option  value=0 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='0')) {echo 'selected';} ?> >Unidad</option>
-                        <option  value=1 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='1')) {echo 'selected';} ?>>Milimetro</option>
-                        <option  value=2 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='2')) {echo 'selected';} ?>>Centimetro</option>
-                        <option  value=3 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='3')) {echo 'selected';} ?>>Metro</option>
-                        <option  value=4 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='4')) {echo 'selected';} ?> >Pulgada</option>
-                    </select>
+                  <select class="form-control form-control-sm mds" name="medidas[unidad][]" onready="javascript:Ponvalor(this,'Ejemplo')"  style="width: 110px">
+                    <option  value=0 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='0')) {echo 'selected';} ?> >Unidad</option>
+                    <option  value=1 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='1')) {echo 'selected';} ?>>Milimetro</option>
+                    <option  value=2 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='2')) {echo 'selected';} ?>>Centimetro</option>
+                    <option  value=3 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='3')) {echo 'selected';} ?>>Metro</option>
+                    <option  value=4 <?php if (isset(($lista->medidas['unidad'][$i]))and($lista->medidas['unidad'][$i]=='4')) {echo 'selected';} ?> >Pulgada</option>
+                  </select>
                 </td>
               </tr>
               @endfor 
             @endif
             </tbody>
           </tr>
-
         </table> 
       </div>
 

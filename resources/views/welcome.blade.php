@@ -13,25 +13,29 @@
  
 <body > 
   <div class="container-fluid">
- @INCLUDE('barra')
+   @INCLUDE('barra')
  </div> 
-  <div class="container-fluid" id="GaleriaGeneral">
-    
+  <div class="container-fluid">
     @INCLUDE('modal')
     @INCLUDE('carrousel')
     <div class="row" id="work">
-      <div class="col-md-3 col-3 " style=" padding: 0px 10px 10px;">
-        <div  style="height:100%; background: #EBEDEF; color: red; max-height: 1200px; margin-left: 0px; padding: 10px; -webkit-box-shadow: 0px 0px 26px -13px rgba(0,0,0,0.75);
+      <div class="col-md-3 col-3 galeriaProductos" style=" padding: 0px 10px 10px;">
+        <div  style="height:100%; background: black; color: red; max-height: 1200px; margin-left: 0px; padding: 10px; -webkit-box-shadow: 0px 0px 26px -13px rgba(0,0,0,0.75);
 -moz-box-shadow: 0px 0px 26px -13px rgba(0,0,0,0.75);
 box-shadow: 0px 0px 26px -13px rgba(0,0,0,0.75);">
           @INCLUDE('filtros.filtros')
         </div> 
       </div>
 
-      <div class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7 text-center" style="margin-left: -20px; padding: 0px"> 
-        <div class="container galeriaProductos" id="la_galeria" >
+      <div class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7 text-center galeriaProductos" style="margin-left: -20px; padding: 0px"> 
+        <div class="container" id="la_galeria" >
              
         </div>
+      </div>
+
+
+      <div class="col-10"  id="DetallesProducto" style="margin-left: 0px; margin-right: -20px; padding: 0px;">
+     
       </div>
 
         <div class="col-2" id="right_wind" style="margin-left: -26px"> 
@@ -40,9 +44,6 @@ box-shadow: 0px 0px 26px -13px rgba(0,0,0,0.75);">
     </div>  
   </div>
 
-<div class="container-fluid DetallesProducto"  id="DetallesProducto" >
-    <div class="row" ></div>
-</div>
 
 <div>
    @INCLUDE('pie_de_pagina')

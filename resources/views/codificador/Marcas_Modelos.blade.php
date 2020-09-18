@@ -170,9 +170,6 @@ ul, #myUL {
 activaMenu();
 function activaMenu()
 {
-
-  console.log('Prueba de llamada');
-
      var toggler = document.getElementsByClassName("caret");
             var i;
 

@@ -21,15 +21,15 @@
 
 <div >	
 	@foreach ($carLista as $item)
-    <div class="carItem" id="ITM{{$item['codigo']}}">
-    	<a><div class='carFoto'><img src="{{$item['fotos']}}" /></div></a>	
+    <div class="carItem" id="ITM{{$item['indice']}}">
+    	<a class=''  data-toggle='detalles'  data-remoto='{{$item['invcodigo'] ?? ''}}'><div class=''><img class='carFoto' src="{{$item['fotos'] ??  'images/noimagen.jpg' }}" /></div></a>	
 		<div class='contenInfo'>
-			 <div style="float: left; width: 2%;"> 
-			 	<input size="16" style="width: 50px;  background: #EBEDEF; border: none;" type="number" id="{{$item['codigo']}}" class="cantidadItem" value="{{$item['cantidad']}}">
+			 <div style="float: left; width: 30%;"> 
+			 	<input size="16" style="width: 50px;  background: #EBEDEF; border: none;" type="number" id="{{$item['indice']}}" class="cantidadItem" value="{{$item['cantidad']}}">
 			 </div>
 			 <div class='carPrecio'>{{$item['precio']}} $</div>
 		<div class='carQuitar'>
-		 <button class="btn btn-default fa fa-trash-o fa-lg" data-toggle='carDelItem' data-remoto="{{$item['codigo']}}"></button>
+		 <button class="btn btn-default fa fa-trash-o fa-lg" data-toggle='carDelItem' data-remoto="{{$item['indice']}}"></button>
 		</div>
 			 <div class='carInfLin'>Código: {{$item['codigo']}}</div>
 			 <div class='carInfLin'>{{$item['fabricante'] ?? ''}}</div>

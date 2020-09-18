@@ -3,24 +3,24 @@
  
 @foreach($lista as $indice =>$dat)
 	<div class='marco_producto'> 
-		 
-		 @if ($dat->precio>100)
+		<?php $precio=$dat->precio; ?>			 
+		 @if ((isset($dat->descuento))and($dat->descuento>0))
 		 <div class='EtiDescuento'>
-		 	    10%
+		 	    -{{$dat->descuento ?? ''}}%
 		 </div> 
-		  <div class='precViej'>{{$dat->precio}}</div>
+		  <div class='precViej'>{{$dat->precio ?? ''}}</div>
+		  <?php $precio=number_format(floatval($dat->precio)-((floatval($dat->precio)*floatval($dat->descuento)/100)), 2, '.', ''); ?>
 		  @else
 		  <div class='precViej' style="color:white;">.</div>
 		 @endif
-		
 
 		 <div class='precio'>
-		 		{{$dat->precio}}
+		 		{{$precio ?? $dat->precio}}
 		 </div>
 
 		 <a class='btn btn-sm '  data-toggle='detalles'  data-remoto='{{$dat->codigo ?? ''}}'>
 		 	 <div class='marco_foto'>
-		 	 	  <img class='foto' id='imagen' src='{{$dat->detalles->fotos['nombre'][0]?? ''}}' alt='Muestra partes'/>
+		 	 	  <img class='foto' id='imagen' src='{{$dat->detalles->fotos['nombre'][0]?? '/images/noimagen.jpg'}}' alt='Muestra partes'/>
 		 	 </div>
 			 <div class='descripcion'>
 			 	<p style="color: black; margin-bottom: -1px; font-family: 'Open Sans', sans-serif; font-size: 14px;">
@@ -34,7 +34,7 @@
 		{{--var $paq=$cod+"<*>"+$fabricante+"<*>"+$precioDesc+"<*>"+$descri+$gale;
 	  var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar --}}
 
-		<button class='boton_agregar btn btn-sm fa fa-shopping-cart'  data-toggle='carAdd'  data-remoto='{{$dat->producto ?? ''}}'	data-extra=''>
+		<button class='boton_agregar btn btn-sm fa fa-shopping-cart'  data-toggle='carAdd'  data-remoto='{{$dat->codigo ?? ''}}'>
 			<input class='cantCar' type='number'  placeholder='Disponibilidad: {{$dat->cantidad}}'> 
 			<div class='TextAgr'>Agregar</div>
 		</button> 
